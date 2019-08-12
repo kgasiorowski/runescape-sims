@@ -2,14 +2,13 @@ import random as r
 import time as t
 from GUI import GUI
 
-item_prob = 1 / 17.4
-total_number_uniques = 24
-
+ITEM_PROB = 1 / 17.4
+TOTAL_NUMBER_UNIQUES = 24
 
 def open_chest(loot):
     diceroll = r.random()
 
-    if diceroll <= item_prob:
+    if diceroll <= ITEM_PROB:
         item_gained = r.randrange(len(loot))
         loot[item_gained] += 1
         if loot[item_gained] == 1:
@@ -27,7 +26,7 @@ def barrows(progresslabel, progressbar, extra_args=None):
     start_time = t.time()
 
     # Number of characters to simulate
-    num_runs = extra_args['num_runs']
+    num_runs = extra_args['num_runs'] if extra_args is not None else 10000
 
     # Keeps track of the number of chests per character, and in total, respectively
     chest_counter = 0
@@ -37,11 +36,11 @@ def barrows(progresslabel, progressbar, extra_args=None):
     total_number_of_uniques = 0
 
     # Keeps track of how many of each unique is acquired per character
-    unique_item_counts = [0] * total_number_uniques
+    unique_item_counts = [0] * TOTAL_NUMBER_UNIQUES
 
     # Keeps track of how many kc each number of uniques took to get
-    unique_kc = [0] * total_number_uniques
-    total_unique_kc = [0] * total_number_uniques
+    unique_kc = [0] * TOTAL_NUMBER_UNIQUES
+    total_unique_kc = [0] * TOTAL_NUMBER_UNIQUES
 
     # On which interval should the program spit out progress notifications.
     # For instance, if percent_interval = 10, program will ping the console
@@ -73,7 +72,7 @@ def barrows(progresslabel, progressbar, extra_args=None):
                 current_number_of_uniques += 1
                 unique_kc[current_number_of_uniques - 1] = chest_counter
 
-                if current_number_of_uniques == total_number_uniques:
+                if current_number_of_uniques == TOTAL_NUMBER_UNIQUES:
                     break
 
         for j in range(len(unique_kc)):
@@ -82,8 +81,8 @@ def barrows(progresslabel, progressbar, extra_args=None):
         total_number_of_uniques += sum(unique_item_counts)
         total_chest_counter += chest_counter
         chest_counter = 0
-        unique_item_counts = [0] * total_number_uniques
-        unique_kc = [0] * total_number_uniques
+        unique_item_counts = [0] * TOTAL_NUMBER_UNIQUES
+        unique_kc = [0] * TOTAL_NUMBER_UNIQUES
 
     average_kc = [round(item / num_runs) for item in total_unique_kc]
 
@@ -121,6 +120,5 @@ def barrows(progresslabel, progressbar, extra_args=None):
 
 if __name__ == "__main__":
 
-    extra_args = {'num_runs' : 100000}
-
-    GUI(barrows, title=f"Barrows ({extra_args['num_runs']:,})", extra_args=extra_args).run()
+    args = {'num_runs': 100000}
+    GUI(barrows, title=f"Barrows ({args['num_runs']:,})")

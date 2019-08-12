@@ -21,7 +21,9 @@ class GUI:
 
         self.thread = Thread(target=self.__run_func, args=(custom_func, extra_args), daemon=True)
 
-    def run(self):
+        self.__run()
+
+    def __run(self):
 
         self.thread.start()
         self.root.mainloop()
