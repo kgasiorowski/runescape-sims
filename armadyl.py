@@ -1,6 +1,6 @@
 import random as r
 import time as t
-from GUI import GUI
+from GUI import Progress_GUI
 
 # armor = 1/127
 # hilt = 1/508
@@ -57,4 +57,4 @@ def armadyl(progresslabel=None, progressbar=None, args=None):
     print(f'Average kc:{average_kc} ({round(end_time-start_time, 2)}s)')
 
 
-GUI(armadyl, "Armadyl")
+Progress_GUI(armadyl, "Armadyl")

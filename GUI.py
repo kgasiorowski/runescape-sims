@@ -3,7 +3,7 @@ from tkinter.ttk import *
 from threading import Thread
 
 
-class GUI:
+class ProgressGUI:
 
     def __init__(self, custom_func, title="Progress", extra_args=None):
 
@@ -21,9 +21,7 @@ class GUI:
 
         self.thread = Thread(target=self.__run_func, args=(custom_func, extra_args), daemon=True)
 
-        self.__run()
-
-    def __run(self):
+    def run(self):
 
         self.thread.start()
         self.root.mainloop()
