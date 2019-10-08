@@ -2,8 +2,6 @@ import random as r
 import time as t
 import GUI
 import Cache
-from tkinter import *
-from tkinter.ttk import *
 
 ITEM_PROB = 1 / 17.4
 TOTAL_NUMBER_UNIQUES = 24
@@ -152,28 +150,8 @@ def barrows(progresslabel, progressbar, extra_args=None):
     print(f'Bye!\n')
 
 
-class ResultsGUI:
-
-    # The format of results should be as follows:
-    # The first element is a list of tuples of the following format:
-    #  (item name, item price, number dropped, total profit)
-    # The rest of the elements are tuples as such:
-    #  (message, value)
-
-    def __init__(self, results, title='Results'):
-
-        self.root = root = Tk()
-        self.root.title(title)
-
-    def run(self):
-
-        self.root.mainloop()
-
-
 if __name__ == "__main__":
 
     args = {'num_runs': 1000, 'results': []}
     progress = GUI.ProgressGUI(barrows, title=f"Barrows ({args['num_runs']:,})", extra_args=args)
     progress.run()
-    # resultsGUI = ResultsGUI(args['results'])
-    # resultsGUI.run()

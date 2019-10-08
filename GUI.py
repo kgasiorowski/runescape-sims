@@ -7,9 +7,6 @@ class ProgressGUI:
 
     def __init__(self, custom_func, title="Progress", extra_args=None):
 
-        self.item_prob = 1 / 17.4
-        self.total_number_uniques = 24
-
         self.root = Tk()
         self.root.title(title)
 
