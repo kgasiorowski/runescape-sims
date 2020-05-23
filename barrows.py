@@ -1,9 +1,29 @@
 import random as r
 import time as t
-from GUI import GUI
+import GUI
+import Cache
 
 ITEM_PROB = 1 / 17.4
 TOTAL_NUMBER_UNIQUES = 24
+
+unique_ids = [4732, 4734, 4736, 4738,  # Karil
+              4708, 4710, 4712, 4714,  # Ahrim
+              4745, 4747, 4749, 4751,  # Torag
+              4753, 4755, 4757, 4759,  # Verac
+              4726, 4728, 4730, 4732,  # Guthan
+              4716, 4718, 4720, 4722]  # Dharok
+
+
+unique_info = []
+for item_id in unique_ids:
+    item_info = Cache.get_cached_item(item_id)
+    item_dict = {}
+    item_dict.setdefault('name', item_info['name'])
+    item_dict.setdefault('price', Cache.convert_to_double(item_info['current']['price']))
+    unique_info.append(item_dict)
+
+print(unique_info)
+
 
 def open_chest(loot):
     diceroll = r.random()
@@ -42,6 +62,8 @@ def barrows(progresslabel, progressbar, extra_args=None):
     unique_kc = [0] * TOTAL_NUMBER_UNIQUES
     total_unique_kc = [0] * TOTAL_NUMBER_UNIQUES
 
+    total_item_drop_count = [0] * 24
+
     # On which interval should the program spit out progress notifications.
     # For instance, if percent_interval = 10, program will ping the console
     # every 10%.
@@ -78,6 +100,9 @@ def barrows(progresslabel, progressbar, extra_args=None):
         for j in range(len(unique_kc)):
             total_unique_kc[j] += unique_kc[j]
 
+        for j in range(len(unique_item_counts)):
+            total_item_drop_count[j] += unique_item_counts[j]
+
         total_number_of_uniques += sum(unique_item_counts)
         total_chest_counter += chest_counter
         chest_counter = 0
@@ -88,6 +113,12 @@ def barrows(progresslabel, progressbar, extra_args=None):
 
     # Stop the timer
     end_time = t.time()
+
+    average_item_drop_count = [item_count/num_runs for item_count in total_item_drop_count]
+    profit_per_item = [0] * TOTAL_NUMBER_UNIQUES
+
+    for i in range(TOTAL_NUMBER_UNIQUES):
+        profit_per_item[i] = unique_info[i]['price'] * average_item_drop_count[i]
 
     print('Done!')
     divider()
@@ -113,6 +144,7 @@ def barrows(progresslabel, progressbar, extra_args=None):
     divider(34)
 
     print(f'Average total number of uniques per character: {round(total_number_of_uniques/num_runs)}')
+    print(f'Average profit: {round(sum(profit_per_item), 2):,}')
     print(f'Total number of chests opened: {total_chest_counter:,}')
     print(f'Simulation took {round(end_time-start_time,3)} seconds')
     print(f'Bye!\n')
@@ -120,5 +152,6 @@ def barrows(progresslabel, progressbar, extra_args=None):
 
 if __name__ == "__main__":
 
-    args = {'num_runs': 100000}
-    GUI(barrows, title=f"Barrows ({args['num_runs']:,})")
+    args = {'num_runs': 1000, 'results': []}
+    progress = GUI.ProgressGUI(barrows, title=f"Barrows ({args['num_runs']:,})", extra_args=args)
+    progress.run()
